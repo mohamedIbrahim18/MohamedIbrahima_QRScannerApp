@@ -19,6 +19,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -34,12 +35,15 @@ import com.example.qr_scannerapp.viewmodel.HistoryQRCodesScanViewModel
 fun HistoryQRCodesScanScreen(viewModel: HistoryQRCodesScanViewModel = hiltViewModel(), navController: NavController) {
     viewModel.fetchSavedQRCodes()
     val savedQRCodes = viewModel.savedQRCodes.value
+    val context = LocalContext.current
 
-    Toast.makeText(
-        LocalContext.current,
-        "Saved QR Codes: ${savedQRCodes.size}",
-        Toast.LENGTH_SHORT
-    ).show()
+    LaunchedEffect(Unit) {
+        viewModel.fetchSavedQRCodes()
+    }
+
+    LaunchedEffect(savedQRCodes) {
+        Toast.makeText(context, "Saved QR Codes: ${savedQRCodes.size}", Toast.LENGTH_SHORT).show()
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()
